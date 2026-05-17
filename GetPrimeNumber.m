@@ -17,7 +17,7 @@ function [prime] = GetPrimeNumber(prime_sz)
   prime(words) = bitset(prime(words), 32);
 
   elapsed_time = etime(clock(), t0);
-  disp([' Generated ', num2str(prime_sz), 'bit prime number on ',
-          '  ', num2str(elapsed_time), ' seconds.']);
+  disp([' Generated ', num2str(prime_sz), 'bit prime number on ', ...
+          num2str(elapsed_time), ' seconds.']);
   endfunction
 
