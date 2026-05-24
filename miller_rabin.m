@@ -1,14 +1,16 @@
 %Only debug, comment with function structure
 %clc;
 %clear all;
-%n = 661%, 1789, 1451 yes
-%n = no
+%n = ##;
 
 function is_prime = miller_rabin(n)
   % Base cases
   is_prime = true;
 
-  if(n <= 3 && n >=2)
+  if(n <= 3 && n >=1)
+    if(n == 1)
+      is_prime = false;
+    endif
     return;
   endif
   if(!bitand(n, 1))
@@ -17,12 +19,13 @@ function is_prime = miller_rabin(n)
    endif
 
   % For performance measure
-  t0 = clock();
+  %t0 = clock();
 
   n = uint64(n);
 
   % Base cases
-  a = uint64([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]);
+  %a = uint64([2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]);
+  a = uint64([2, 3]);
 
   % Get n - 1 = (2^s)*d
   s = uint32(0);
@@ -41,11 +44,11 @@ function is_prime = miller_rabin(n)
 
   for bases = a
     % x = a^d % n; Test with base a(i)
-    x = modular_exp(bases, d, n)
+    x = modular_exp(bases, d, n);
 
     if(x != 1 && x != nm1)
       i = 0;
-      for i = 1 : s + 1
+      for i = 1 : s
         x = modular_exp(x, 2, n);
         if( x == nm1);
           % Possible prime
@@ -58,7 +61,7 @@ function is_prime = miller_rabin(n)
       endif
     endif
   endfor
-  elapsed_time = etime(clock(), t0);
+  %elapsed_time = etime(clock(), t0);
 %  printf("elapsed %d\r\n\r\n", elapsed_time);
 endfunction
 
