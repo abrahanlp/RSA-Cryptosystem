@@ -1,8 +1,9 @@
 clc, clear all;
 
-disp("===================================");
-disp("RSA cypher script for Octave/MATLAB");
-disp("===================================");
+disp("=======================================");
+disp("RSA encryption script for Octave/MATLAB");
+disp("=======================================");
+file_in_path = "TestDataSet/Quijote.txt";
 
 function prime_n = get_random_prime()
   do
@@ -55,6 +56,9 @@ function [d, x, y] = blankinship(a, b)
   end
 end
 
+disp("Generating keys...")
+tic()
+
 p = uint64(get_random_prime())
 q = uint64(get_random_prime())
 
@@ -78,5 +82,21 @@ end
 
 clear("gcd", "y")
 
-disp("END")
+toc()
+
+disp("File encryption...")
+
+file_in = fopen(file_in_path, "rb");
+data_in = uint8(fread(file_in, Inf, "uint8"));
+fclose(file_in);
+printf("%d bytes on \"%s\"\r\n", sizeof(data_in), file_in_path);
+
+tic()
+data_out = zeros(sizeof(data_in), 1, "uint8");
+
+for i = 1 : sizeof(data_in)
+  data_out(i) = data_in(i) + 1;
+end
+
+toc()
 
