@@ -44,7 +44,7 @@ function [d, x, y] = blankinship(a, b)
   end
 
   % x sign to positive
-  if (row_a(2) < 0)
+  if (row_a(1) < 0)
     d = -row_a(1);
     x = -row_a(2);
     y = -row_a(3);
@@ -65,9 +65,18 @@ e = uint64(65537)
 
 [gcd, d, y] = blankinship(e, phi);
 
-if((gcd == 1) & (rem(e*uint64(d), phi) == 1))
-  disp("Great!")
-  clear("gcd", "y")
+if(d < 0)
+  d = d + int64(phi);
 end
 
+d = uint64(d)
+
+if((gcd ~= 1) || (rem(e*uint64(d), phi) ~= 1))
+  printf("GCD = %d | rem(e * d, phi) = %d\r\n", gcd, rem(e*uint64(d), phi))
+  return
+end
+
+clear("gcd", "y")
+
+disp("END")
 
