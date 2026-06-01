@@ -1,9 +1,15 @@
-clc, clear all;
+clc
+clear all
 
 disp("=======================================");
 disp("RSA encryption script for Octave/MATLAB");
-disp("=======================================");
+disp("=======================================\r\n");
+
+% Introduce nexte the file path to encrypt
 file_in_path = "TestDataSet/Quijote.txt";
+
+% Path where encrypted file will be stored (automatically generated)
+file_out_path = strrep(file_in_path, ".txt", ".cyph");
 
 function prime_n = get_random_prime()
   do
@@ -84,19 +90,53 @@ clear("gcd", "y")
 
 toc()
 
-disp("File encryption...")
+disp("\r\nFile encryption...")
 
 file_in = fopen(file_in_path, "rb");
+if(file_in < 0)
+  printf("Error opening input: %s\r\n", file_in);
+  return;
+end
+
 data_in = uint8(fread(file_in, Inf, "uint8"));
 fclose(file_in);
-printf("%d bytes on \"%s\"\r\n", sizeof(data_in), file_in_path);
+printf("%d bytes on \"%s\"\r\n", numel(data_in), file_in_path);
 
 tic()
-data_out = zeros(sizeof(data_in), 1, "uint8");
+data_out = zeros(numel(data_in), 1, "uint8");
 
-for i = 1 : sizeof(data_in)
-  data_out(i) = data_in(i) + 1;
+min_t = 10;
+max_t = 0;
+mean_t = 0;
+
+for i = 1 : numel(data_in)
+  t0 = clock();
+  data_out(i) = modular_exp(data_in(i), e, n);
+  byte_elap_time = etime(clock(), t0);
+  if(byte_elap_time > max_t)
+    max_t = byte_elap_time;
+  elseif(byte_elap_time < min_t)
+    min_t = byte_elap_time;
+  end
+
+  mean_t = (mean_t + byte_elap_time) / 2;
+
+  if (mod(i, 64) == 0)
+    printf("%d Min:%d Mean:%d Max:%d\r\n", i, min_t, mean_t, max_t);
+  end
 end
 
 toc()
+
+file_out = fopen(file_out_path, "wb");
+if(file_out < 0)
+  printf("Error opening output: %s\r\n", file_in);
+  return;
+end
+
+if(fwrite(file_out, data_out, "uint8") == numel(data_in))
+  printf("%d encrypted bytes on \"%s\"\r\n", numel(data_in), file_out_path);
+end
+
+fclose(file_out);
 
