@@ -8,9 +8,6 @@ disp("=======================================\r\n");
 % Introduce nexte the file path to encrypt
 file_in_path = "TestDataSet/Quijote.txt";
 
-% Path where encrypted file will be stored (automatically generated)
-file_out_path = strrep(file_in_path, ".txt", ".cyph");
-
 function prime_n = get_random_prime()
   do
     % Get a random number between 47 and max_uint32
@@ -103,13 +100,13 @@ fclose(file_in);
 printf("%d bytes on \"%s\"\r\n", numel(data_in), file_in_path);
 
 tic()
-data_out = zeros(numel(data_in), 1, "uint8");
+data_out = zeros(numel(data_in), 1, "uint32");
 
 min_t = 10;
 max_t = 0;
 mean_t = 0;
 
-for i = 1 : numel(data_in)
+for i = 1 : 1024 %numel(data_in)
   t0 = clock();
   data_out(i) = modular_exp(data_in(i), e, n);
   byte_elap_time = etime(clock(), t0);
@@ -127,6 +124,12 @@ for i = 1 : numel(data_in)
 end
 
 toc()
+
+% Path where encrypted file will be stored (automatically generated)
+path_sufix = strcat("n", num2str(n), "d", num2str(d), ".cyph");
+file_out_path = strrep(file_in_path, ".txt", path_sufix);
+
+clear("i", "path_sufix")
 
 file_out = fopen(file_out_path, "wb");
 if(file_out < 0)
