@@ -1,13 +1,10 @@
 clc
 clear all
 
-disp("=======================================");
-disp("RSA encryption script for Octave/MATLAB");
-disp("=======================================\r\n");
-
 % Introduce nexte the file path to encrypt
 file_in_path = "TestDataSet/Quijote.txt";
 
+% Generates a prime random number
 function prime_n = get_random_prime()
   do
     % Get a random number between 47 and max_uint32
@@ -27,6 +24,9 @@ function mcd = euclides_algorithm (a, b)
   mcd = a;
   endfunction
 
+% Finds solution for equation:
+%   (a * x) + (b * y) = g.c.d(a, b)
+% where g.c.d(a, b) = d
 function [d, x, y] = blankinship(a, b)
   % Cast
   a = int64(a);
@@ -59,6 +59,11 @@ function [d, x, y] = blankinship(a, b)
   end
 end
 
+
+disp("=======================================");
+disp("RSA encryption script for Octave/MATLAB");
+disp("=======================================\r\n");
+
 disp("Generating keys...")
 tic()
 
@@ -85,6 +90,7 @@ end
 
 clear("gcd", "y")
 
+% Keys generation time elapsed
 toc()
 
 disp("\r\nFile encryption...")
@@ -102,6 +108,7 @@ printf("%d bytes on \"%s\"\r\n", numel(data_in), file_in_path);
 tic()
 data_out = zeros(numel(data_in), 1, "uint32");
 
+% Min, mean and max time encrypting bytes
 min_t = 10;
 max_t = 0;
 mean_t = 0;
@@ -125,7 +132,8 @@ end
 
 toc()
 
-% Path where encrypted file will be stored (automatically generated)
+% Path where encrypted file will be stored
+% Keys are append on file name for decrypting later
 path_sufix = strcat("n", num2str(n), "d", num2str(d), ".cyph");
 file_out_path = strrep(file_in_path, ".txt", path_sufix);
 
