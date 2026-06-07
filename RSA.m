@@ -11,7 +11,7 @@ function prime_n = get_random_prime()
     % on uint32 format
     prime_n = randi([47, intmax('uint16')], "uint32");
   until(isprime(prime_n))
-  endfunction
+endfunction
 
 % Look for Great Commond Divider by
 % the Euclides Algorithm
@@ -130,6 +130,7 @@ for i = 1 : 1024 %numel(data_in)
   end
 end
 
+% File encryption elapsed time
 toc()
 
 % Path where encrypted file will be stored
