@@ -135,7 +135,7 @@ toc()
 
 % Path where encrypted file will be stored
 % Keys are append on file name for decrypting later
-path_sufix = strcat("n", num2str(n), "d", num2str(d), ".cyph");
+path_sufix = strcat("_n", num2str(n), "d", num2str(d), ".cyph");
 file_out_path = strrep(file_in_path, ".txt", path_sufix);
 
 clear("i", "path_sufix")
