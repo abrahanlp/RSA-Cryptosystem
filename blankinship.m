@@ -12,7 +12,7 @@ function [d, x, y] = blankinship(a, b)
 
   while row_b(1) ~= 0
 
-    q = idivide(row_a(1), row_b(1), 'fix'); //Random problems
+    q = idivide(row_a(1), row_b(1), 'fix');
 
     % New row
     row_temp = row_a - q * row_b;
@@ -22,15 +22,8 @@ function [d, x, y] = blankinship(a, b)
     row_b = row_temp;
   end
 
-  % x sign to positive
-  if (row_a(1) < 0)
-    d = -row_a(1);
-    x = -row_a(2);
-    y = -row_a(3);
-  else
-    d = row_a(1);
-    x = row_a(2);
-    y = row_a(3);
-  end
+  d = row_a(1);
+  x = row_a(2);
+  y = row_a(3);
 end
 
