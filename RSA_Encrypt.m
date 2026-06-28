@@ -59,7 +59,7 @@ min_t = 10;
 max_t = 0;
 mean_t = 0;
 
-for i = 1 : 1024 %numel(data_in)
+for i = 1 : numel(data_in)
   t0 = clock();
   data_out(i) = modular_exp(data_in(i), e, n);
   byte_elap_time = etime(clock(), t0);
@@ -71,7 +71,7 @@ for i = 1 : 1024 %numel(data_in)
 
   mean_t = (mean_t + byte_elap_time) / 2;
 
-  if (mod(i, 64) == 0)
+  if (mod(i, 65536) == 0)
     printf("%d Min:%d Mean:%d Max:%d\r\n", i, min_t, mean_t, max_t);
   end
 end
@@ -92,7 +92,7 @@ if(file_out < 0)
   return;
 end
 
-if(fwrite(file_out, data_out, "uint8") == numel(data_in))
+if(fwrite(file_out, data_out, "uint32") == numel(data_in))
   printf("%d encrypted bytes on \"%s\"\r\n", numel(data_in), file_out_path);
 end
 
