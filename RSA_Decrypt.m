@@ -12,7 +12,10 @@ function RSA_Decrypt(file_in_path)
     return;
   end
 
-  data_in = uint8(fread(file_in, Inf, "uint8"));
+% TODO Make this auto from file_in_path stream
+  n = uint32(861977813);
+  d = uint32(437128265);
+  data_in = uint32(fread(file_in, Inf, "uint32"));
   fclose(file_in);
 
   tic()
@@ -35,7 +38,7 @@ function RSA_Decrypt(file_in_path)
 
     mean_t = (mean_t + byte_elap_time) / 2;
 
-    if (mod(i, 64) == 0)
+    if (mod(i, 65536) == 0)
       printf("%d Min:%d Mean:%d Max:%d\r\n", i, min_t, mean_t, max_t);
     end
   end
@@ -44,7 +47,7 @@ function RSA_Decrypt(file_in_path)
   toc()
 
   % Path where decrypted file will be stored
-  file_out_path = strrep(file_in_path, ".cyph", "_dec.txt");
+  file_out_path = strrep(file_in_path, ".cyph", "_decyphered.txt");
 
   clear("i")
 
