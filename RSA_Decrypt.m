@@ -4,7 +4,18 @@ function RSA_Decrypt(file_in_path)
   disp("RSA decription script for Octave/MATLAB");
   disp("=======================================\r\n");
 
-  disp("\r\nFile decryption...")
+
+  disp("Getting keys...\r\n")
+  % %*[^_] Means read everything except '_'
+  values_tmp = sscanf(file_in_path, "%*[^_]_n%ud%u");
+
+  if length(values_tmp) == 2
+      n = uint32(values_tmp(1));
+      d = uint32(values_tmp(2));
+  else
+      disp('There are no keys on %s\r\n', file_in_path);
+      return;
+  end
 
   file_in = fopen(file_in_path, "rb");
   if(file_in < 0)
@@ -12,12 +23,10 @@ function RSA_Decrypt(file_in_path)
     return;
   end
 
-% TODO Make this auto from file_in_path stream
-  n = uint32(861977813);
-  d = uint32(437128265);
   data_in = uint32(fread(file_in, Inf, "uint32"));
   fclose(file_in);
 
+  disp("\r\nFile decryption...")
   tic()
   data_out = zeros(numel(data_in), 1, "uint8");
 
