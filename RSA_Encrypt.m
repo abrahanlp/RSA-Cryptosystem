@@ -44,7 +44,7 @@ function RSA_Encrypt(file_in_path)
   data_in = uint8(fread(file_in, Inf, "uint8"));
   fclose(file_in);
 
-  data_in_size = 1024;numel(data_in);
+  data_in_size = numel(data_in);
   printf("%d bytes on \"%s\"\r\n", data_in_size, file_in_path);
 
   tic()

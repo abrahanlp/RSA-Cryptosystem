@@ -10,8 +10,8 @@ function RSA_Decrypt(file_in_path)
   values_tmp = sscanf(file_in_path, "%*[^_]_n%ud%u");
 
   if length(values_tmp) == 2
-      n = uint32(values_tmp(1));
-      d = uint32(values_tmp(2));
+      n = uint32(values_tmp(1))
+      d = uint32(values_tmp(2))
   else
       disp('There are no keys on %s\r\n', file_in_path);
       return;
