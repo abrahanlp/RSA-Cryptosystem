@@ -7,10 +7,14 @@ function RSA_Encrypt(file_in_path)
   disp("Generating keys...")
   tic()
 
-  p = uint64(get_random_prime())
-  q = uint64(get_random_prime())
+  do
+    p = uint64(get_random_prime());
+    q = uint64(get_random_prime());
 
-  n = p * q
+    n = p * q;
+  until(n > max('uint16')) % Ensure a long enough key
+
+  p, q, n
   phi = (p - 1)*(q - 1)
 
   e = uint64(65537)
@@ -41,11 +45,11 @@ function RSA_Encrypt(file_in_path)
     return;
   end
 
-  data_in = uint8(fread(file_in, Inf, "uint8"));
+  data_in = uint16(fread(file_in, Inf, "uint16"));
   fclose(file_in);
 
   data_in_size = numel(data_in);
-  printf("%d bytes on \"%s\"\r\n", data_in_size, file_in_path);
+  printf("%d words on \"%s\"\r\n", data_in_size, file_in_path);
 
   tic()
   data_out = zeros(numel(data_in_size), 1, "uint32");
@@ -56,20 +60,20 @@ function RSA_Encrypt(file_in_path)
   mean_t = 0;
 
   for i = 1 : data_in_size
-    t0 = clock();
+%    t0 = clock();
     data_out(i) = modular_exp(data_in(i), e, n);
-    byte_elap_time = etime(clock(), t0);
-    if(byte_elap_time > max_t)
-      max_t = byte_elap_time;
-    elseif(byte_elap_time < min_t)
-      min_t = byte_elap_time;
-    end
-
-    mean_t = (mean_t + byte_elap_time) / 2;
-
-    if (mod(i, 65536) == 0)
-      printf("%d Min:%d Mean:%d Max:%d\r\n", i, min_t, mean_t, max_t);
-    end
+%    byte_elap_time = etime(clock(), t0);
+%    if(byte_elap_time > max_t)
+%      max_t = byte_elap_time;
+%    elseif(byte_elap_time < min_t)
+%      min_t = byte_elap_time;
+%    end
+%
+%    mean_t = (mean_t + byte_elap_time) / 2;
+%
+%    if (mod(i, 65536) == 0)
+%      printf("%d Min:%d Mean:%d Max:%d\r\n", i, min_t, mean_t, max_t);
+%    end
   end
 
   % File encryption elapsed time
@@ -89,8 +93,9 @@ function RSA_Encrypt(file_in_path)
   end
 
   if(fwrite(file_out, data_out, "uint32") == data_in_size)
-    printf("%d encrypted bytes on \"%s\"\r\n", data_in_size, file_out_path);
+    printf("%d encrypted words on \"%s\"\r\n", data_in_size, file_out_path);
   end
 
   fclose(file_out);
 endfunction
+
